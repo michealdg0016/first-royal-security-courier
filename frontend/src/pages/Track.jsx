@@ -163,7 +163,7 @@ export default function Track() {
               {/* Visual progress bar */}
               <div className="track-progress-bar">
                 <p className="track-progress-title">Shipment Progress</p>
-                <div className="progress-steps">
+                <div className="progress-steps-wrap"><div className="progress-steps">
                   {STATUSES.map((s, i) => (
                     <div key={s} className="progress-step">
                       {i < STATUSES.length - 1 && (
@@ -175,7 +175,7 @@ export default function Track() {
                       <p className="progress-label">{s}</p>
                     </div>
                   ))}
-                </div>
+                </div></div>
               </div>
 
               {/* Timeline */}

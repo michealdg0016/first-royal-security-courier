@@ -41,10 +41,6 @@ echo "   🌐 Website:    http://localhost:5173"
 echo "   🔌 API:        http://localhost:5000/api/health"
 echo "   🗄  Database:   MongoDB Atlas"
 echo ""
-echo "   👑 Admin:      admin@firstroyalsecurity.com / Royal@Admin2024!"
-echo "   👤 Customer:   james@example.com / Customer123!"
-echo "   📦 Track:      FRSC-A1B2-C3D4-E5F6"
-echo ""
 echo "Ctrl+C to stop"
 trap "kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit 0" INT TERM
 wait

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
@@ -12,22 +13,28 @@ export default function AdminLayout({ children, title, subtitle }) {
   const loc = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const close = () => setSidebarOpen(false)
 
   return (
     <div className="admin-wrap">
-      <aside className="admin-sidebar">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && <div className="admin-sidebar-overlay" onClick={close} />}
+
+      <aside className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
         <div className="admin-sidebar-logo">
           <div className="admin-sidebar-logo-mark">👑</div>
           <div className="admin-logo-text">
             <div className="admin-logo-name">FRSC Admin</div>
             <div className="admin-logo-sub">Royal Control Panel</div>
           </div>
+          <button className="admin-sidebar-close" onClick={close}>✕</button>
         </div>
 
         <ul className="admin-nav">
           {NAV.map(n => (
             <li key={n.path} className="admin-nav-item">
-              <Link to={n.path}
+              <Link to={n.path} onClick={close}
                 className={`admin-nav-link ${loc.pathname === n.path ? 'active' : ''}`}>
                 <span className="admin-nav-icon">{n.icon}</span>
                 {n.label}
@@ -45,7 +52,7 @@ export default function AdminLayout({ children, title, subtitle }) {
             </div>
           </div>
           <div style={{display:'flex',gap:8}}>
-            <Link to="/" className="btn btn-ghost btn-sm" style={{flex:1,justifyContent:'center',fontSize:12}}>🌐 Site</Link>
+            <Link to="/" className="btn btn-ghost btn-sm" style={{flex:1,justifyContent:'center',fontSize:12}} onClick={close}>🌐 Site</Link>
             <button className="btn btn-ghost btn-sm" style={{flex:1,fontSize:12}} onClick={() => { logout(); navigate('/') }}>Sign Out</button>
           </div>
         </div>
@@ -53,9 +60,14 @@ export default function AdminLayout({ children, title, subtitle }) {
 
       <main className="admin-content">
         <div className="admin-page-header">
-          <div>
-            <h1 className="admin-page-title">{title}</h1>
-            {subtitle && <p className="admin-page-sub">{subtitle}</p>}
+          <div style={{display:'flex',alignItems:'center',gap:14}}>
+            <button className="admin-menu-toggle" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar">
+              ☰
+            </button>
+            <div>
+              <h1 className="admin-page-title">{title}</h1>
+              {subtitle && <p className="admin-page-sub">{subtitle}</p>}
+            </div>
           </div>
         </div>
         {children}

@@ -75,7 +75,7 @@ export default function Dashboard() {
                 <p style={{fontSize:14,marginBottom:20}}>Your shipments will appear here once registered by our team.</p>
               </div>
             ) : (
-              <table className="data-table">
+              <div className="table-scroll"><table className="data-table">
                 <thead>
                   <tr>
                     <th>Tracking Code</th>
@@ -113,7 +113,7 @@ export default function Dashboard() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
             )}
           </div>
 

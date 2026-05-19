@@ -76,7 +76,5 @@ async function seedIfEmpty() {
     await StatusHistory.insertMany(historyDocs)
   }
 
-  console.log('✅ Seed complete')
-  console.log('👑 Admin: admin@firstroyalsecurity.com / Royal@Admin2024!')
-  console.log('👤 Customer: james@example.com / Customer123!')
+  console.log('✅ Seed complete — initial data ready')
 }
