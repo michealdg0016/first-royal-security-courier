@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken'
-import { getDb } from '../db/setup.js'
+import { User } from '../models/index.js'
 
 export const JWT_SECRET = process.env.JWT_SECRET || 'frsc-royal-jwt-secret-2024-secure'
 
-export function authMiddleware(req, res, next) {
+export async function authMiddleware(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1]
   if (!token) return res.status(401).json({ error: 'Authentication required' })
   try {
     const decoded = jwt.verify(token, JWT_SECRET)
-    const user = getDb().query('SELECT * FROM users WHERE id = ?').get(decoded.id)
+    const user = await User.findById(decoded.id)
     if (!user) return res.status(401).json({ error: 'User not found' })
     if (user.is_frozen) return res.status(403).json({ error: 'Your account has been suspended. Contact support.' })
     req.user = user
@@ -18,8 +18,8 @@ export function authMiddleware(req, res, next) {
   }
 }
 
-export function adminMiddleware(req, res, next) {
-  authMiddleware(req, res, () => {
+export async function adminMiddleware(req, res, next) {
+  await authMiddleware(req, res, () => {
     if (!['superadmin', 'admin'].includes(req.user.role)) {
       return res.status(403).json({ error: 'Administrator access required' })
     }

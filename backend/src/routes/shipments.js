@@ -1,22 +1,38 @@
 import { Router } from 'express'
-import { getDb } from '../db/setup.js'
+import { Shipment, StatusHistory } from '../models/index.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = Router()
 
-router.get('/track/:code', (req, res) => {
-  const db = getDb()
-  const shipment = db.query('SELECT * FROM shipments WHERE tracking_code = ?').get(req.params.code.toUpperCase())
-  if (!shipment) return res.status(404).json({ error: 'No shipment found with that tracking code. Please check and try again.' })
-  const history = db.query('SELECT * FROM status_history WHERE shipment_id = ? ORDER BY created_at ASC').all(shipment.id)
-  const { sender_id, ...pub } = shipment
-  res.json({ shipment: pub, history })
+// Public tracking
+router.get('/track/:code', async (req, res) => {
+  try {
+    const shipment = await Shipment.findOne({ tracking_code: req.params.code.toUpperCase() }).lean({ virtuals: true })
+    if (!shipment) return res.status(404).json({ error: 'No shipment found with that tracking code. Please check and try again.' })
+
+    const history = await StatusHistory.find({ shipment_id: shipment._id }).sort({ created_at: 1 }).lean({ virtuals: true })
+
+    // Remove internal sender_id for public response
+    const { sender_id, _id, __v, ...pub } = shipment
+    pub.id = shipment._id
+
+    res.json({ shipment: pub, history: history.map(h => ({ ...h, id: h._id })) })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
-router.get('/my', authMiddleware, (req, res) => {
-  const db = getDb()
-  const shipments = db.query(`SELECT * FROM shipments WHERE sender_id = ? OR sender_email = ? ORDER BY created_at DESC`).all(req.user.id, req.user.email)
-  res.json({ shipments })
+// User's own shipments (auth required)
+router.get('/my', authMiddleware, async (req, res) => {
+  try {
+    const shipments = await Shipment.find({
+      $or: [{ sender_id: req.user._id }, { sender_email: req.user.email }]
+    }).sort({ created_at: -1 }).lean({ virtuals: true })
+
+    res.json({ shipments: shipments.map(s => ({ ...s, id: s._id })) })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 export default router
