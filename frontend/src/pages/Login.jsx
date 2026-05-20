@@ -60,12 +60,7 @@ export default function Login() {
           Don't have an account? <Link to="/signup">Create one free</Link>
         </div>
 
-        <div className="divider" />
-        <div style={{background:'rgba(201,162,39,0.06)',border:'1px solid rgba(201,162,39,0.15)',borderRadius:8,padding:14}}>
-          <p style={{fontSize:12,color:'var(--text-muted)',marginBottom:8,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.5px'}}>Demo Credentials</p>
-          <p style={{fontSize:13,color:'var(--text-secondary)'}}>👑 <strong style={{color:'var(--gold-400)'}}>Super Admin:</strong> admin@firstroyalsecurity.com / Royal@Admin2024!</p>
-          <p style={{fontSize:13,color:'var(--text-secondary)',marginTop:4}}>👤 <strong>Customer:</strong> james@example.com / Customer123!</p>
-        </div>
+
       </div>
     </div>
   )
