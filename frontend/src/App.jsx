@@ -4,6 +4,9 @@ import Home from './pages/Home'
 import Track from './pages/Track'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import About from './pages/About'
+import Services from './pages/Services'
+import Contact from './pages/Contact'
 import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/Admin/index'
 import AdminShipments from './pages/Admin/Shipments'
@@ -27,11 +30,15 @@ export default function App() {
   // Track page handles its own LiveChat instance — skip the global widget there
   // to avoid two overlapping panels (especially on mobile where it covers the send button)
   const isTrackPage = location.pathname.startsWith('/track')
+  const isContactPage = location.pathname === '/contact'
 
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/track" element={<Track />} />
         <Route path="/track/:code" element={<Track />} />
         <Route path="/login" element={<Login />} />
@@ -45,8 +52,8 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {/* Global chat widget — hidden on /track (that page manages its own instance) */}
-      {!isAdmin && !isTrackPage && <LiveChat />}
+      {/* Global chat widget — hidden on /track and /contact (those pages handle their own context) */}
+      {!isAdmin && !isTrackPage && !isContactPage && <LiveChat />}
     </>
   )
 }

@@ -26,22 +26,22 @@ export default function Footer() {
           <div>
             <h4 className="footer-heading">Services</h4>
             <ul className="footer-links">
-              <li><a href="/#services">International Express</a></li>
-              <li><a href="/#services">Secure Freight</a></li>
-              <li><a href="/#services">Priority Royal</a></li>
-              <li><a href="/#services">Corporate Solutions</a></li>
-              <li><a href="/#services">Customs Brokerage</a></li>
+              <li><Link to="/services">International Express</Link></li>
+              <li><Link to="/services">Secure Freight</Link></li>
+              <li><Link to="/services">Priority Royal</Link></li>
+              <li><Link to="/services">Corporate Solutions</Link></li>
+              <li><Link to="/contact">Get a Quote</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="footer-heading">Company</h4>
             <ul className="footer-links">
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#about">Our Network</a></li>
-              <li><a href="#about">Careers</a></li>
-              <li><a href="#about">Press</a></li>
-              <li><a href="#about">Partners</a></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/about#network">Our Network</Link></li>
+              <li><Link to="/contact">Careers</Link></li>
+              <li><Link to="/contact">Press</Link></li>
+              <li><Link to="/contact">Partners</Link></li>
             </ul>
           </div>
 
@@ -49,10 +49,10 @@ export default function Footer() {
             <h4 className="footer-heading">Support</h4>
             <ul className="footer-links">
               <li><Link to="/track">Track Shipment</Link></li>
-              <li><a href="#contact">Contact Us</a></li>
-              <li><a href="#contact">Claims</a></li>
-              <li><a href="#contact">FAQ</a></li>
-              <li><a href="#contact">Service Alerts</a></li>
+              <li><Link to="/contact">Contact Us</Link></li>
+              <li><Link to="/contact#contact-form">File a Claim</Link></li>
+              <li><Link to="/contact#faq">FAQ</Link></li>
+              <li><Link to="/contact">Service Alerts</Link></li>
             </ul>
             <div style={{marginTop:24}}>
               <p style={{fontSize:12,color:'var(--text-muted)',marginBottom:4}}>24/7 Royal Hotline</p>
