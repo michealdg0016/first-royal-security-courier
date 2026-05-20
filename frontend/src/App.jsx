@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Track from './pages/Track'
@@ -22,7 +22,11 @@ function ProtectedRoute({ children, adminOnly = false }) {
 
 export default function App() {
   const { user } = useAuth()
+  const location = useLocation()
   const isAdmin = user && ['superadmin', 'admin'].includes(user.role)
+  // Track page handles its own LiveChat instance — skip the global widget there
+  // to avoid two overlapping panels (especially on mobile where it covers the send button)
+  const isTrackPage = location.pathname.startsWith('/track')
 
   return (
     <>
@@ -41,8 +45,8 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {/* Live Chat widget — show on non-admin pages for everyone */}
-      {!isAdmin && <LiveChat />}
+      {/* Global chat widget — hidden on /track (that page manages its own instance) */}
+      {!isAdmin && !isTrackPage && <LiveChat />}
     </>
   )
 }

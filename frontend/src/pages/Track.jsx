@@ -65,13 +65,11 @@ export default function Track() {
   return (
     <div>
       <Navbar />
-      {/* Inline chat for tracking page - triggered by frozen/support actions */}
-      {chatOpen && (
-        <LiveChat
-          autoOpenReason={chatReason}
-          trackingCode={result?.shipment?.tracking_code || null}
-        />
-      )}
+      {/* Chat widget for tracking page — always present, auto-opens on frozen/support triggers */}
+      <LiveChat
+        autoOpenReason={chatOpen ? chatReason : null}
+        trackingCode={result?.shipment?.tracking_code || null}
+      />
       <div className="track-page">
         <div className="container">
 
