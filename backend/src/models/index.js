@@ -1,6 +1,8 @@
 export { default as User } from './User.js'
 export { default as Shipment } from './Shipment.js'
 export { default as StatusHistory } from './StatusHistory.js'
+export { default as ChatSession } from './ChatSession.js'
+export { default as ChatMessage } from './ChatMessage.js'
 
 export const STATUSES = [
   'Order Placed',

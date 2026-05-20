@@ -7,6 +7,7 @@ const NAV = [
   { path: '/admin/shipments', label: 'Shipments', icon: '📦' },
   { path: '/admin/shipments/new', label: 'New Shipment', icon: '➕' },
   { path: '/admin/users', label: 'Users', icon: '👥' },
+  { path: '/admin/chat', label: 'Live Chat', icon: '💬' },
 ]
 
 export default function AdminLayout({ children, title, subtitle }) {

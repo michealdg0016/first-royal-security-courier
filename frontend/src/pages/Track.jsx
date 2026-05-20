@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import LiveChat from '../components/LiveChat'
 import api from '../api/client'
 
 const STATUSES = [
@@ -31,6 +32,8 @@ export default function Track() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatReason, setChatReason] = useState(null)
 
   useEffect(() => {
     if (code) search(code)
@@ -62,6 +65,13 @@ export default function Track() {
   return (
     <div>
       <Navbar />
+      {/* Inline chat for tracking page - triggered by frozen/support actions */}
+      {chatOpen && (
+        <LiveChat
+          autoOpenReason={chatReason}
+          trackingCode={result?.shipment?.tracking_code || null}
+        />
+      )}
       <div className="track-page">
         <div className="container">
 
@@ -116,7 +126,18 @@ export default function Track() {
                     <p className="track-code">👑 {result.shipment.tracking_code}</p>
                     <p className="track-status-main">{result.shipment.is_frozen ? '❄️ Shipment On Hold' : result.shipment.status}</p>
                     {result.shipment.is_frozen && (
-                      <div className="track-frozen-tag">❄️ This shipment has been placed on hold. Contact support for details.</div>
+                      <div className="track-frozen-tag">
+                        ❄️ This shipment has been placed on hold. Contact support for details.
+                        <button
+                          className="track-frozen-chat-btn"
+                          onClick={() => {
+                            setChatReason(`Your shipment ${result.shipment.tracking_code} is on hold. How can we help?`)
+                            setChatOpen(true)
+                          }}
+                        >
+                          💬 Chat with Support
+                        </button>
+                      </div>
                     )}
                     <span className={`badge ${getStatusBadge(result.shipment.status, result.shipment.is_frozen)}`}>
                       {STATUS_ICONS[currentIdx] || '📦'} {result.shipment.is_frozen ? 'On Hold' : result.shipment.status}
@@ -210,7 +231,16 @@ export default function Track() {
                 <p style={{color:'var(--text-secondary)',fontSize:15,marginBottom:12}}>
                   Need help with this shipment? Our Royal Support team is standing by.
                 </p>
-                <p style={{color:'var(--gold-400)',fontWeight:600,fontSize:16}}>📞 +1-800-ROYAL-01 &nbsp;·&nbsp; 📧 support@firstroyalsecurity.com</p>
+                <p style={{color:'var(--gold-400)',fontWeight:600,fontSize:16,marginBottom:16}}>📞 +1-800-ROYAL-01 &nbsp;·&nbsp; 📧 support@firstroyalsecurity.com</p>
+                <button
+                  className="btn btn-gold"
+                  onClick={() => {
+                    setChatReason(`I need help with shipment ${result.shipment.tracking_code}`)
+                    setChatOpen(true)
+                  }}
+                >
+                  💬 Chat with Support
+                </button>
               </div>
             </div>
           )}

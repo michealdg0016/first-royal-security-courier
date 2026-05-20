@@ -8,7 +8,9 @@ import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/Admin/index'
 import AdminShipments from './pages/Admin/Shipments'
 import AdminUsers from './pages/Admin/Users'
+import AdminChat from './pages/Admin/Chat'
 import CreateShipment from './pages/Admin/CreateShipment'
+import LiveChat from './components/LiveChat'
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, loading } = useAuth()
@@ -19,19 +21,28 @@ function ProtectedRoute({ children, adminOnly = false }) {
 }
 
 export default function App() {
+  const { user } = useAuth()
+  const isAdmin = user && ['superadmin', 'admin'].includes(user.role)
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/track" element={<Track />} />
-      <Route path="/track/:code" element={<Track />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/shipments" element={<ProtectedRoute adminOnly><AdminShipments /></ProtectedRoute>} />
-      <Route path="/admin/shipments/new" element={<ProtectedRoute adminOnly><CreateShipment /></ProtectedRoute>} />
-      <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsers /></ProtectedRoute>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/track" element={<Track />} />
+        <Route path="/track/:code" element={<Track />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/shipments" element={<ProtectedRoute adminOnly><AdminShipments /></ProtectedRoute>} />
+        <Route path="/admin/shipments/new" element={<ProtectedRoute adminOnly><CreateShipment /></ProtectedRoute>} />
+        <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsers /></ProtectedRoute>} />
+        <Route path="/admin/chat" element={<ProtectedRoute adminOnly><AdminChat /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      {/* Live Chat widget — show on non-admin pages for everyone */}
+      {!isAdmin && <LiveChat />}
+    </>
   )
 }
