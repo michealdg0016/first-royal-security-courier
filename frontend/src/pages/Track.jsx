@@ -123,20 +123,26 @@ export default function Track() {
                   <div>
                     <p className="track-code">👑 {result.shipment.tracking_code}</p>
                     <p className="track-status-main">{result.shipment.is_frozen ? '❄️ Shipment On Hold' : result.shipment.status}</p>
-                    {result.shipment.is_frozen && (
-                      <div className="track-frozen-tag">
-                        ❄️ This shipment has been placed on hold. Contact support for details.
-                        <button
-                          className="track-frozen-chat-btn"
-                          onClick={() => {
-                            setChatReason(`Your shipment ${result.shipment.tracking_code} is on hold. How can we help?`)
-                            setChatOpen(true)
-                          }}
-                        >
-                          💬 Chat with Support
-                        </button>
-                      </div>
-                    )}
+                    {result.shipment.is_frozen && (() => {
+                      const frozenEntry = [...(result.history || [])].reverse().find(h => h.status === 'On Hold')
+                      return (
+                        <div className="track-frozen-tag">
+                          <span>❄️ This shipment has been placed on hold. Contact support for details.</span>
+                          {frozenEntry?.location && (
+                            <span className="track-frozen-location">📍 Currently held at: <strong>{frozenEntry.location}</strong></span>
+                          )}
+                          <button
+                            className="track-frozen-chat-btn"
+                            onClick={() => {
+                              setChatReason(`Your shipment ${result.shipment.tracking_code} is on hold. How can we help?`)
+                              setChatOpen(true)
+                            }}
+                          >
+                            💬 Chat with Support
+                          </button>
+                        </div>
+                      )
+                    })()}
                     <span className={`badge ${getStatusBadge(result.shipment.status, result.shipment.is_frozen)}`}>
                       {STATUS_ICONS[currentIdx] || '📦'} {result.shipment.is_frozen ? 'On Hold' : result.shipment.status}
                     </span>

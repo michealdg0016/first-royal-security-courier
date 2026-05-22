@@ -679,6 +679,7 @@ a{color:inherit;text-decoration:none}
 .track-frozen-tag{display:flex;align-items:center;flex-wrap:wrap;gap:12px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:10px 14px;color:#fca5a5;font-size:13px;margin-top:10px}
 .track-frozen-chat-btn{background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:999px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:var(--transition);white-space:nowrap;font-family:'Inter',sans-serif}
 .track-frozen-chat-btn:hover{background:rgba(239,68,68,0.35)}
+.track-frozen-location{display:block;width:100%;font-size:12px;color:#fca5a5;font-weight:400;margin-top:2px}.track-frozen-location strong{color:#f87171;font-weight:700}
 
 /* ════════════════════════════════
    ADMIN CHAT PANEL

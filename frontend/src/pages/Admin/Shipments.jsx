@@ -31,6 +31,9 @@ export default function AdminShipments() {
   const [setStatusIdx, setSetStatusIdx] = useState(0)
   const [deliveryDate, setDeliveryDate] = useState('')
   const [freezeReason, setFreezeReason] = useState('')
+  const [freezeHub, setFreezeHub] = useState('')
+  const [freezeCity, setFreezeCity] = useState('')
+  const [freezeCountry, setFreezeCountry] = useState('')
   const [history, setHistory] = useState([])
   const [searchParams] = useSearchParams()
 
@@ -68,14 +71,17 @@ export default function AdminShipments() {
     }
   }, [])
 
-  const closeModal = () => { setModal(null); setNote(''); setLocation(''); setFreezeReason(''); setDeliveryDate('') }
+  const closeModal = () => { setModal(null); setNote(''); setLocation(''); setFreezeReason(''); setFreezeHub(''); setFreezeCity(''); setFreezeCountry(''); setDeliveryDate('') }
 
   const act = async (action, extra = {}) => {
     try {
       let res
       if (action === 'progress') res = await api.patch(`/admin/shipments/${selected.id}/progress`, { note, location })
       else if (action === 'regress') res = await api.patch(`/admin/shipments/${selected.id}/regress`)
-      else if (action === 'freeze') res = await api.patch(`/admin/shipments/${selected.id}/freeze`, { reason: freezeReason })
+      else if (action === 'freeze') {
+        const freezeLocation = [freezeHub, freezeCity, freezeCountry].filter(Boolean).join(', ')
+        res = await api.patch(`/admin/shipments/${selected.id}/freeze`, { reason: freezeReason, location: freezeLocation })
+      }
       else if (action === 'unfreeze') res = await api.patch(`/admin/shipments/${selected.id}/unfreeze`)
       else if (action === 'setstatus') res = await api.patch(`/admin/shipments/${selected.id}/set-status`, { status_index: setStatusIdx, note })
       else if (action === 'delivery') res = await api.patch(`/admin/shipments/${selected.id}/update-delivery`, { estimated_delivery: deliveryDate })
@@ -309,6 +315,21 @@ export default function AdminShipments() {
             <div className="form-group">
               <label className="form-label">Reason for Hold</label>
               <textarea className="form-textarea" rows={3} placeholder="e.g. Awaiting customs documentation, payment verification required..." value={freezeReason} onChange={e => setFreezeReason(e.target.value)} />
+            </div>
+            <p style={{fontSize:12,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px',margin:'16px 0 10px'}}>Current Location</p>
+            <div className="form-group">
+              <label className="form-label">Facility / Hub Name <span style={{color:'var(--text-muted)',fontWeight:400}}>(optional)</span></label>
+              <input className="form-input" placeholder="e.g. Customs Inspection Facility, Terminal 3" value={freezeHub} onChange={e => setFreezeHub(e.target.value)} />
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <input className="form-input" placeholder="e.g. Frankfurt" value={freezeCity} onChange={e => setFreezeCity(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Country</label>
+                <input className="form-input" placeholder="e.g. Germany" value={freezeCountry} onChange={e => setFreezeCountry(e.target.value)} />
+              </div>
             </div>
             <div className="modal-actions">
               <button className="btn btn-ghost" onClick={() => setModal('detail')}>Cancel</button>

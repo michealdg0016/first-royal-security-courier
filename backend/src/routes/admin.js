@@ -149,7 +149,7 @@ router.patch('/shipments/:id/freeze', async (req, res) => {
     s.is_frozen = true; s.updated_at = new Date()
     await s.save()
 
-    await StatusHistory.create({ shipment_id: s._id, status: 'On Hold', note: req.body.reason || 'Shipment placed on hold by administrator', location: '', updated_by: req.user._id })
+    await StatusHistory.create({ shipment_id: s._id, status: 'On Hold', note: req.body.reason || 'Shipment placed on hold by administrator', location: req.body.location || '', updated_by: req.user._id })
     res.json({ shipment: leanS((await Shipment.findById(s._id).lean({ virtuals: true }))) })
   } catch (err) { res.status(500).json({ error: err.message }) }
 })
